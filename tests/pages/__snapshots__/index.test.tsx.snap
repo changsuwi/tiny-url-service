@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render Home Component renders a URL text box 1`] = `
+<input
+  name="Original URL Textbox"
+  type="text"
+  value=""
+/>
+`;
