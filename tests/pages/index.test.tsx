@@ -20,7 +20,7 @@ describe('Test textbox', () => {
 describe('Test button', () => {
   const server = setupServer(
     rest.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}:3000/api/url`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/url`,
       (req, res, ctx) => {
         return res(ctx.json({ key: 'abc' }));
       }
@@ -41,7 +41,12 @@ describe('Test button', () => {
     await waitFor(() => screen.getByTestId<HTMLParagraphElement>('result'));
 
     expect(screen.getByTestId<HTMLParagraphElement>('result').innerHTML).toBe(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/abc`
+      'Generating...'
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByText(`${process.env.NEXT_PUBLIC_BASE_URL}/abc`)
+      ).toBeInTheDocument()
     );
   });
 });

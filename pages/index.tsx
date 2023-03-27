@@ -1,16 +1,26 @@
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
-import { ChangeEvent, useState, SyntheticEvent } from 'react';
+import { ChangeEvent, useState, SyntheticEvent, useEffect } from 'react';
 import axios from 'axios';
+
+enum Status {
+  Default = 'default',
+  Generating = 'generating',
+  Generated = 'generated',
+}
 
 export default function Home() {
   const [inputURL, setInputURL] = useState('');
   const [tinyUrl, setTinyUrl] = useState('');
+  const [status, setStatus] = useState(Status.Default);
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setInputURL(event.target.value);
   }
+
   async function handleUrlShorten(event: SyntheticEvent) {
     event.preventDefault();
+    setStatus(Status.Generating);
     try {
       const result = await axios.post(`/api/url`, {
         url: inputURL,
@@ -21,6 +31,21 @@ export default function Home() {
       console.error(err);
     }
   }
+
+  useEffect(() => {
+    if (tinyUrl.length > 0) {
+      setStatus(Status.Generated);
+    }
+  }, [tinyUrl]);
+
+  function getResult() {
+    return status === Status.Generated
+      ? tinyUrl
+      : status === Status.Generating
+      ? 'Generating...'
+      : '';
+  }
+
   return (
     <>
       <Head>
@@ -34,7 +59,7 @@ export default function Home() {
           <input type="text" value={inputURL} onChange={handleInputChange} />
           <button type="submit">Generate</button>
         </form>
-        {tinyUrl && <p data-testid="result">{tinyUrl}</p>}
+        {<p data-testid="result">{getResult()}</p>}
       </main>
     </>
   );
