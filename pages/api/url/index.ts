@@ -2,6 +2,7 @@ import { idToKey, keyToID } from '@/lib/url-shortener';
 import { URLModel } from '@/lib/url/url.model';
 import { URLRepository } from '@/lib/url/url.repo';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import isURL from 'validator/lib/isURL';
 
 const allowedMethods = ['GET', 'POST'];
 
@@ -16,10 +17,10 @@ export default async function handler(
   const urlRepository = new URLRepository();
 
   if (req.method === 'POST') {
-    // TODO: validate url
     const originalURL = req.body.url;
-    if (!originalURL) {
+    if (!isURL(originalURL)) {
       res.status(400).send({ message: 'invalid url' });
+      return;
     }
 
     try {
