@@ -1,12 +1,25 @@
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, SyntheticEvent } from 'react';
+import axios from 'axios';
 
 export default function Home() {
   const [inputURL, setInputURL] = useState('');
-
+  const [tinyUrl, setTinyUrl] = useState('');
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setInputURL(event.target.value);
+  }
+  async function handleUrlShorten(event: SyntheticEvent) {
+    event.preventDefault();
+    try {
+      const result = await axios.post('http://localhost:3000/api/url', {
+        url: inputURL,
+      });
+
+      setTinyUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${result.data.key}`);
+    } catch (err) {
+      console.error(err);
+    }
   }
   return (
     <>
@@ -17,9 +30,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div>
+        <form onSubmit={handleUrlShorten}>
           <input type="text" value={inputURL} onChange={handleInputChange} />
-        </div>
+          <button type="submit">Generate</button>
+        </form>
+        {tinyUrl && <p data-testid="result">{tinyUrl}</p>}
       </main>
     </>
   );
