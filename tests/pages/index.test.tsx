@@ -1,11 +1,52 @@
-import { render, screen } from '@testing-library/react';
-import Home from '../../pages/index';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 
-describe('Render Home Component', () => {
-  const { container } = render(<Home />);
-  it('renders a URL text box', () => {
-    const textbox = screen.getByRole('textbox');
+import Home from '@/pages/index';
 
-    expect(textbox).toBeInTheDocument();
+describe('Test textbox', () => {
+  beforeEach(() => {
+    render(<Home />);
+  });
+
+  const expectContent = 'hackmd.io';
+  test(`When trigger change event, ${expectContent} should be display`, () => {
+    const textbox = screen.getByRole<HTMLInputElement>('textbox');
+    fireEvent.change(textbox, { target: { value: expectContent } });
+    expect(textbox.value).toBe(expectContent);
+  });
+});
+
+describe('Test button', () => {
+  const server = setupServer(
+    rest.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/url`,
+      (req, res, ctx) => {
+        return res(ctx.json({ key: 'abc' }));
+      }
+    )
+  );
+
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
+  beforeEach(() => {
+    render(<Home />);
+  });
+
+  test('When user click the button', async () => {
+    const button = screen.getByRole<HTMLButtonElement>('button');
+    fireEvent.click(button);
+    await waitFor(() => screen.getByTestId<HTMLParagraphElement>('result'));
+
+    expect(screen.getByTestId<HTMLParagraphElement>('result').innerHTML).toBe(
+      'Generating...'
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByText(`${process.env.NEXT_PUBLIC_BASE_URL}/abc`)
+      ).toBeInTheDocument()
+    );
   });
 });
