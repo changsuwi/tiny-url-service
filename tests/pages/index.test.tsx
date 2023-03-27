@@ -19,9 +19,12 @@ describe('Test textbox', () => {
 
 describe('Test button', () => {
   const server = setupServer(
-    rest.post('http://localhost:3000/api/url', (req, res, ctx) => {
-      return res(ctx.json({ key: 'abc' }));
-    })
+    rest.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}:3000/api/url`,
+      (req, res, ctx) => {
+        return res(ctx.json({ key: 'abc' }));
+      }
+    )
   );
 
   beforeAll(() => server.listen());

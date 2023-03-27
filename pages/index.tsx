@@ -12,7 +12,7 @@ export default function Home() {
   async function handleUrlShorten(event: SyntheticEvent) {
     event.preventDefault();
     try {
-      const result = await axios.post('http://localhost:3000/api/url', {
+      const result = await axios.post(`/api/url`, {
         url: inputURL,
       });
 
