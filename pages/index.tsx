@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
 import { ChangeEvent, useState, SyntheticEvent, useEffect } from 'react';
 import axios from 'axios';
 
@@ -7,6 +6,7 @@ enum Status {
   Default = 'default',
   Generating = 'generating',
   Generated = 'generated',
+  Fail = 'fail',
 }
 
 export default function Home() {
@@ -29,6 +29,7 @@ export default function Home() {
       setTinyUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${result.data.key}`);
     } catch (err) {
       console.error(err);
+      setStatus(Status.Fail);
     }
   }
 
@@ -43,7 +44,9 @@ export default function Home() {
       ? tinyUrl
       : status === Status.Generating
       ? 'Generating...'
-      : '';
+      : status === Status.Fail
+      ? 'Generate tiny url fail'
+      : 'Get your tiny url here';
   }
 
   return (
@@ -54,12 +57,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <form onSubmit={handleUrlShorten}>
-          <input type="text" value={inputURL} onChange={handleInputChange} />
-          <button type="submit">Generate</button>
-        </form>
-        {<p data-testid="result">{getResult()}</p>}
+      <main className="flex justify-center items-center w-screen h-screen bg-slate-300">
+        <div className="flex flex-col bg-slate-50 rounded-2xl px-6 py-4 min-h-[250px]">
+          <h1 className="text-2xl text-gray-600 ">Tiny URL Generator</h1>
+          <div className="mt-2 flex flex-col flex-grow justify-center">
+            <form onSubmit={handleUrlShorten}>
+              <input
+                className="md:w-96 px-4 py-2 mr-4 border-2 border-neutral-500 rounded-2xl outline-none"
+                type="text"
+                value={inputURL}
+                placeholder={'Your URL'}
+                onChange={handleInputChange}
+              />
+              <button
+                type="submit"
+                className="font-semibold bg-amber-300 text-gray-600 rounded-md px-4 py-2 disabled:bg-amber-200"
+                disabled={inputURL.length === 0}
+              >
+                Generate
+              </button>
+            </form>
+            <div
+              className="mt-8 font-semibold text-lg bg-slate-300 text-gray-600 w-full px-4 py-2 text-center rounded-2xl"
+              data-testid="result"
+            >
+              {getResult()}
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );
