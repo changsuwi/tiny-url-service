@@ -18,7 +18,11 @@ export default async function handler(
 
   if (req.method === 'POST') {
     const originalURL = req.body.url;
-    if (!isURL(originalURL)) {
+    if (
+      !isURL(originalURL, {
+        require_protocol: true,
+      })
+    ) {
       res.status(400).send({ message: 'invalid url' });
       return;
     }
