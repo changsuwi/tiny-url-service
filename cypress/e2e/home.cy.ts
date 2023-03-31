@@ -17,9 +17,9 @@ describe('When user visit homepage', () => {
   it('user can type valid url and click generate button, then user can see the tiny url in the result div', () => {
     cy.get('input').type(URL_JSON.url_success_case);
     cy.get('button').click();
-    cy.get('[data-testid="result"]', { timeout: 10000 }).contains(
-      Cypress.config().baseUrl
-    );
+    cy.get('[data-testid="result"]').contains(Cypress.config().baseUrl, {
+      timeout: 10000,
+    });
   });
 
   it('if user type invalid url and click generate button, then user can see the error message in the result div', () => {
