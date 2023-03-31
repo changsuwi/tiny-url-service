@@ -1,38 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Tiny URL Service
+
+Tiny URL Service is a web application that generates short URLs from long ones. It's built with [Next.js](https://nextjs.org/) and [TypeScript](https://www.typescriptlang.org/) and uses [Cypress.io](https://www.cypress.io/) for end-to-end testing. The project also incorporates [eslint](https://eslint.org/) for code linting and [Jest](https://jestjs.io/) for unit testing. 
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+Node.js (v14 or later)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installing
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+To get a development environment up and running, follow these steps:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Clone the repo: 
+   `git clone https://github.com/changsuwi/tiny-url-service.git`
+#### Install dependencies: 
+   
+   `npm install`
+   
+   `yarn`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### Start the development server: 
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+`npm run dev`
 
-## Learn More
+`yarn dev`
 
-To learn more about Next.js, take a look at the following resources:
+### Running Tests
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the Cypress end-to-end tests, execute the following command:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`npm run cypress` 
 
-## Deploy on Vercel
+`yarn cypress`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To run Jest unit tests, execute the following command:
+
+`npm run test`
+
+`yarn test`
+
+
+
+### Deployment
+
+This project is hosted on [Vercel](https://vercel.com/) and can be accessed at https://tiny-url-service.vercel.app/.
+
+### Auto End-To-End Testing
+
+This project uses GitHub Actions to automate e2e testing after successful deployment.
+
+### ORM
+
+This project uses [Prisma](https://www.prisma.io/) to access PostgreSQL in in [Supabase](https://app.supabase.com/). The `schema.prisma` file defines the database schema
+
+## Built With
+
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ESLint](https://eslint.org/)
+- [Cypress.io](https://www.cypress.io/)
+- [Jest](https://jestjs.io/)
+- [Prisma](https://www.prisma.io/)
+- [husky](https://typicode.github.io/husky/#/)
+- [Supabase](https://app.supabase.com/)
+
