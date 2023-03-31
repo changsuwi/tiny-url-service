@@ -34,8 +34,13 @@ export default function Key() {
 
   async function redirectToOriginalURL() {
     const originalURL = await getOriginalURL();
-    if (originalURL) {
+    if (
+      originalURL &&
+      originalURL != `${process.env.NEXT_PUBLIC_BASE_URL}/${key}`
+    ) {
       router.push(originalURL);
+    } else {
+      setStatus(Status.fail);
     }
   }
 
