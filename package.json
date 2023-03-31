@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier '**/*.{js,jsx,ts,tsx}' --write",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "cypress": "cypress open",
+    "cypress:production": "export CYPRESS_BASE_URL=cypress run "
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx}": [
@@ -37,6 +39,7 @@
     "@types/http-errors": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "autoprefixer": "^10.4.14",
+    "cypress": "^12.9.0",
     "eslint-config-prettier": "^8.8.0",
     "husky": "^8.0.3",
     "jest": "^29.5.0",
