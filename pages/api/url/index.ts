@@ -47,7 +47,7 @@ const getOriginalURLByKey: NextApiHandler = async (
     throw new createHttpError.BadRequest('invalid tiny url');
   } else {
     const urlModel = await urlRepository.getURL(id);
-    res.status(200).json(urlModel);
+    res.redirect(urlModel.originalURL);
   }
 };
 
