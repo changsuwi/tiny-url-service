@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { ChangeEvent, useState, SyntheticEvent, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 enum Status {
   Default = 'default',
@@ -11,7 +11,7 @@ enum Status {
 
 export default function Home() {
   const [inputURL, setInputURL] = useState('');
-  const [tinyUrl, setTinyUrl] = useState('');
+  const [result, setResult] = useState('');
   const [status, setStatus] = useState(Status.Default);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -29,26 +29,32 @@ export default function Home() {
         url: inputURL,
       });
 
-      setTinyUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${result.data.key}`);
+      setResult(`${process.env.NEXT_PUBLIC_BASE_URL}/${result.data.key}`);
     } catch (err) {
       console.error(err);
+      if (axios.isAxiosError(err)) {
+        setResult(
+          err.response?.data?.error?.message || 'Generate tiny url fail'
+        );
+      } else {
+        setResult('Generate tiny url fail');
+      }
+
       setStatus(Status.Fail);
     }
   }
 
   useEffect(() => {
-    if (tinyUrl.length > 0) {
+    if (result.length > 0) {
       setStatus(Status.Generated);
     }
-  }, [tinyUrl]);
+  }, [result]);
 
   function getResult() {
-    return status === Status.Generated
-      ? tinyUrl
+    return status === Status.Generated || status === Status.Fail
+      ? result
       : status === Status.Generating
       ? 'Generating...'
-      : status === Status.Fail
-      ? 'Generate tiny url fail'
       : 'Get your tiny url here';
   }
 
