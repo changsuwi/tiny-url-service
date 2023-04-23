@@ -13,7 +13,18 @@ const createTinyURL: NextApiHandler = async (
   res: NextApiResponse<URLModel>
 ) => {
   const schema = Yup.object().shape({
-    url: Yup.string().url().required('URL is required'),
+    url: Yup.string()
+      .url()
+      .required('URL is required')
+      .test(
+        'Invalid domain name',
+        'Domain name should not be same as our service domain',
+        (value) => {
+          return !value.startsWith(
+            process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+          );
+        }
+      ),
   });
   const { url } = schema.validateSync(req.body);
   let urlModel = await urlRepository.postURL(url);
