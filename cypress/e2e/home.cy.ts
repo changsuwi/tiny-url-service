@@ -25,6 +25,6 @@ describe('When user visit homepage', () => {
   it('if user type invalid url and click generate button, then user can see the error message in the result div', () => {
     cy.get('input').type(URL_JSON.url_fail_case);
     cy.get('button').click();
-    cy.get('[data-testid="result"]').contains('Generate tiny url fail');
+    cy.get('[data-testid="result"]').contains('url must be a valid URL');
   });
 });
