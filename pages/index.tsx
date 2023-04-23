@@ -20,6 +20,9 @@ export default function Home() {
 
   async function handleUrlShorten(event: SyntheticEvent) {
     event.preventDefault();
+    if (status === Status.Generating) {
+      return;
+    }
     setStatus(Status.Generating);
     try {
       const result = await axios.post(`/api/url`, {
